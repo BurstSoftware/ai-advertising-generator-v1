@@ -5,7 +5,7 @@ def generate_advertisements(ad_idea, api_key):
     """Generate 10 advertisements using Google's Gemini model"""
     try:
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-pro')
+        model = genai.GenerativeModel('gemini-1.0-pro') # Changed model name
         
         prompt = f"""Generate 10 unique advertisement ideas for {ad_idea}. 
         For each advertisement, provide:
