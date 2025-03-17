@@ -1,0 +1,7 @@
+# Core dependencies for the Streamlit app
+streamlit>=1.31.0
+google-generativeai>=0.3.2
+
+# Additional dependencies recommended for Streamlit Cloud
+python-dotenv>=1.0.1  # For environment variable management (optional if you keep API key in UI)
+requests>=2.31.0      # For any potential HTTP requests
