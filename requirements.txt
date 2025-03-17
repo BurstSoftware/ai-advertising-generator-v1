@@ -1,9 +1,8 @@
 # Core dependencies for the Streamlit app
 streamlit>=1.31.0
 google-generativeai>=0.3.2
-pandas>=2.0.0        # For data manipulation and CSV export
+pandas>=2.0.0
 
-# Additional dependencies recommended
-python-dotenv>=1.0.1  # For environment variable management (optional if you keep API key in UI)
-requests>=2.31.0      # For any potential HTTP requests
-configparser>=5.3.0    # For reading configuration files (e.g., storing API keys)
+# Additional dependencies recommended for Streamlit Cloud
+python-dotenv>=1.0.1  # For environment variable management (optional, but recommended)
+configparser>=5.3.0    # For reading configuration files (e.g., storing API keys, model name)
