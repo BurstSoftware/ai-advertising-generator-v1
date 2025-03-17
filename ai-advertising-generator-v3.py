@@ -3,11 +3,11 @@ import google.generativeai as genai
 import pandas as pd
 import io  # For creating in-memory CSV files
 import os
-from dotenv import load_dotenv
+#from dotenv import load_dotenv # Removed dotenv import
 
-load_dotenv()  # Load environment variables from .env
+#load_dotenv()  # Load environment variables from .env #Commented out dotenv loading
 
-API_KEY = os.getenv("API_KEY")  # Access API key from environment
+#API_KEY = os.getenv("API_KEY")  # Access API key from environment # Commented out dotenv
 MODEL_NAME = os.getenv("MODEL_NAME", "gemini-1.5-flash-latest")  # Default if not set
 VERSION = os.getenv("VERSION", "1.0")  # Default if not set
 
@@ -25,9 +25,6 @@ def generate_advertisements(ad_idea, api_key, tone, age_group, keywords="", call
         Include this call to action: {call_to_action}.
         Vary the advertisements to a level of {ad_variation} out of 10, 1 being minimal variation and 10 being high variation.
         For each advertisement, provide:
-        1. A catchy headline
-        2. A brief description (2-3 sentences)
-        Format each ad as:
         Ad [Number]:
         Headline: [Your headline]
         Description: [Your description]
@@ -75,9 +72,12 @@ def create_csv_download_link(df):
 # Streamlit App
 st.title("AI Advertising Generator")
 
+# API Key Input
+API_KEY = st.text_input("Enter your Google API Key:", type="password")
+
 # Check if API key is available
 if not API_KEY:
-    st.warning("Please set the API_KEY environment variable.")
+    st.warning("Please enter your Google API Key to continue.")
     st.stop() # Stop the app if the API key is missing
 
 # User Inputs
