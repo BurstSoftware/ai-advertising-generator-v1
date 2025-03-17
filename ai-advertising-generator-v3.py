@@ -2,11 +2,14 @@ import streamlit as st
 import google.generativeai as genai
 import pandas as pd
 import io  # For creating in-memory CSV files
+import configparser
 
-# Configuration - consider using a config.ini file as in the previous response for API key
-# Ensure you have your API key set up here
-API_KEY = "YOUR_API_KEY" # Replace with your actual API Key
-MODEL_NAME = 'gemini-1.5-flash-latest'
+# Load configuration
+config = configparser.ConfigParser()
+config.read('config.ini')
+API_KEY = config['DEFAULT']['api_key']
+MODEL_NAME = config['DEFAULT']['model_name']
+VERSION = config['DEFAULT']['version']
 
 # Generate Advertisements Function (Modified)
 def generate_advertisements(ad_idea, api_key, tone, age_group, keywords="", call_to_action="", ad_variation=5):
@@ -60,11 +63,10 @@ def create_csv_download_link(df):
     csv_buffer = io.StringIO()
     df.to_csv(csv_buffer, index=False)
     csv_data = csv_buffer.getvalue()
-    b64 = st.components.v1.html(
-        f'<a href="data:file/csv;base64,{base64.b64encode(csv_data.encode()).decode()}" download="advertisements.csv">Download CSV</a>',
-        unsafe_allow_html=True
-    )
-    return b64
+    import base64
+    b64 = base64.b64encode(csv_data.encode()).decode()  # Encode to base64
+    href = f'<a href="data:file/csv;base64,{b64}" download="advertisements.csv">Download CSV File</a>'
+    return href
 
 # Streamlit App
 st.title("AI Advertising Generator")
@@ -95,24 +97,19 @@ if st.button("Generate Advertisements"):
             st.subheader("Generated Advertisements:")
             st.markdown(advertisement_text)
 
-            #Parse the Ads
+            # Parse the Ads
             ads = parse_advertisements(advertisement_text)
 
-            #Create DataFrame
-            if ads:  # Only if ads were successfully parsed
+            # Create DataFrame and Download Link
+            if ads:
                 df = pd.DataFrame(ads)
-
-                #Create Download Link
-                st.subheader("Download Advertisements as CSV")
-                create_csv_download_link(df)
-
+                csv_link = create_csv_download_link(df)  # Get the HTML link
+                st.markdown(f"#### Download Advertisements as CSV\n\n{csv_link}", unsafe_allow_html=True) #display the link
             else:
                 st.warning("Could not parse the generated advertisements for CSV download.")
-
-
     else:
         st.warning("Please enter an advertising idea first!")
 
 # Footer
 st.markdown("---")
-st.write("Powered by Nathan Rossow @ Burst Software & Google AI | © 2025 Advertising Solutions")
+st.write(f"Powered by Nathan Rossow @ Burst Software & Google AI | Version: {VERSION} | © 2025 Advertising Solutions")
