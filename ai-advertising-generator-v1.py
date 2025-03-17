@@ -49,7 +49,7 @@ if api_key:
                 # Generate question, answer, and contact based on first ad
                 question = f"How can I effectively promote {ad_idea} to reach my target audience?"
                 answer = f"To effectively promote {ad_idea}, consider using the creative concepts generated above, tailored to your specific audience through multiple channels like social media, print, and digital advertising."
-                contact = "For a detailed marketing strategy tailored to your needs, contact our advertising experts at: marketing@solutions.com or call us at (555) 123-4567."
+                contact = "For a detailed marketing strategy tailored to your needs, contact our advertising experts at: burstsoftwaredevelopment@gmail.com or call us at (507) 810-9226."
                 
                 st.subheader("Follow-up Information:")
                 st.write(f"**Question:** {question}")
@@ -62,4 +62,4 @@ else:
 
 # Add some basic styling and footer
 st.markdown("---")
-st.write("Powered by xAI & Google AI | © 2025 Advertising Solutions")
+st.write("Powered by Nathan Rossow @ Burst Software & Google AI | © 2025 Advertising Solutions")
