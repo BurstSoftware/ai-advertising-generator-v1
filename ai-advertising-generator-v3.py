@@ -2,14 +2,16 @@ import streamlit as st
 import google.generativeai as genai
 import pandas as pd
 import io  # For creating in-memory CSV files
-import configparser
+#import configparser # Remove this
 
-# Load configuration
-config = configparser.ConfigParser()
-config.read('config.ini')
-API_KEY = config['DEFAULT']['api_key']
-MODEL_NAME = config['DEFAULT']['model_name']
-VERSION = config['DEFAULT']['version']
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # Load environment variables from .env
+
+API_KEY = os.getenv("API_KEY")  # Access API key from environment
+MODEL_NAME = os.getenv("MODEL_NAME", "gemini-1.5-flash-latest")  # Default if not set
+VERSION = os.getenv("VERSION", "1.0")  # Default if not set
 
 # Generate Advertisements Function (Modified)
 def generate_advertisements(ad_idea, api_key, tone, age_group, keywords="", call_to_action="", ad_variation=5):
@@ -52,9 +54,9 @@ def parse_advertisements(advertisement_text):
             description = lines[1].split(": ", 1)[1].strip()  # Extract description
 
             ads.append({"Ad Number": number.strip(), "Headline": headline, "Description": description})
-        except Exception as e:
-            print(f"Error parsing ad block: {ad_block}, Error: {e}")  # Debugging
-            continue # Skip to the next ad block
+    except Exception as e:
+        print(f"Error parsing ad block: {ad_block}, Error: {e}")  # Debugging
+        continue # Skip to the next ad block
 
     return ads
 
@@ -94,19 +96,19 @@ if st.button("Generate Advertisements"):
         with st.spinner("Generating advertisements..."):
             advertisement_text = generate_advertisements(ad_idea, API_KEY, tone, age_group, keywords, call_to_action, ad_variation)
 
-            st.subheader("Generated Advertisements:")
-            st.markdown(advertisement_text)
+        st.subheader("Generated Advertisements:")
+        st.markdown(advertisement_text)
 
-            # Parse the Ads
-            ads = parse_advertisements(advertisement_text)
+        # Parse the Ads
+        ads = parse_advertisements(advertisement_text)
 
-            # Create DataFrame and Download Link
-            if ads:
-                df = pd.DataFrame(ads)
-                csv_link = create_csv_download_link(df)  # Get the HTML link
-                st.markdown(f"#### Download Advertisements as CSV\n\n{csv_link}", unsafe_allow_html=True) #display the link
-            else:
-                st.warning("Could not parse the generated advertisements for CSV download.")
+        # Create DataFrame and Download Link
+        if ads:
+            df = pd.DataFrame(ads)
+            csv_link = create_csv_download_link(df)  # Get the HTML link
+            st.markdown(f"#### Download Advertisements as CSV\n\n{csv_link}", unsafe_allow_html=True) #display the link
+        else:
+            st.warning("Could not parse the generated advertisements for CSV download.")
     else:
         st.warning("Please enter an advertising idea first!")
 
